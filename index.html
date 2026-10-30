@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXUS REALM • Gaming Community Platform Dashboard</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  
+  <!-- Google Fonts: Rajdhani & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Rajdhani:wght@500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Main App Layout -->
+  <div class="app-layout">
+
+    <!-- ==========================================================================
+         SIDEBAR NAVIGATION
+         ========================================================================== -->
+    <aside class="sidebar" id="appSidebar">
+      <div class="sidebar-brand">
+        <div class="brand-logo-icon">
+          <i class="fa-solid fa-bolt-lightning"></i>
+        </div>
+        <div style="display:flex; flex-direction:column;">
+          <span class="brand-title">NEXUS</span>
+        </div>
+        <span class="brand-tag">OS 2.4</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <span class="nav-section-title">Main Portal</span>
+        <a class="nav-item active" href="#dashboard">
+          <i class="fa-solid fa-cubes"></i>
+          <span>Dashboard</span>
+        </a>
+        <a class="nav-item" href="#library">
+          <i class="fa-solid fa-gamepad"></i>
+          <span>Game Library</span>
+          <span class="nav-badge">18</span>
+        </a>
+        <a class="nav-item" href="#community">
+          <i class="fa-solid fa-fire"></i>
+          <span>Highlights Feed</span>
+        </a>
+        <a class="nav-item" href="#achievements">
+          <i class="fa-solid fa-trophy"></i>
+          <span>Achievements</span>
+        </a>
+
+        <span class="nav-section-title">Community</span>
+        <a class="nav-item" href="#friends">
+          <i class="fa-solid fa-user-group"></i>
+          <span>Active Squad</span>
+          <span class="nav-badge" id="navOnlineFriendsBadge">24 Online</span>
+        </a>
+        <a class="nav-item" href="#tournaments" onclick="showToast('Tournaments', 'Season 4 Winter Championship registrations open next Friday!')">
+          <i class="fa-solid fa-medal"></i>
+          <span>Tournaments</span>
+        </a>
+        <a class="nav-item" href="#leaderboards" onclick="showToast('Leaderboards', 'Global Top 500 refreshed 10 minutes ago.')">
+          <i class="fa-solid fa-ranking-star"></i>
+          <span>Leaderboards</span>
+        </a>
+
+        <span class="nav-section-title">Preferences</span>
+        <a class="nav-item" onclick="openEditProfileModal()">
+          <i class="fa-solid fa-sliders"></i>
+          <span>Profile Settings</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="system-status-card">
+          <div class="pulse-indicator"></div>
+          <div class="status-info">
+            <span class="status-label">Network Mesh</span>
+            <span class="status-value">US-East • 14ms Ping</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ==========================================================================
+         MAIN VIEWPORT WRAPPER
+         ========================================================================== -->
+    <div class="main-wrapper">
+
+      <!-- TOP STICKY HEADER -->
+      <header class="top-header">
+        <button class="mobile-toggle-btn" id="mobileSidebarToggle" aria-label="Toggle navigation menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <!-- Global Search Bar -->
+        <div class="header-search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" class="search-input" id="globalSearchInput" placeholder="Search games, highlights, friends, tournaments...">
+          <span class="search-shortcut">⌘K</span>
+        </div>
+
+        <!-- Header Actions -->
+        <div class="header-actions">
+          <!-- Audio FX Toggle -->
+          <button class="btn-icon-control" id="btnAudioToggle" title="Toggle Sound FX">
+            <i class="fa-solid fa-volume-high" id="audioToggleIcon"></i>
+          </button>
+
+          <!-- Notification Bell -->
+          <button class="btn-icon-control" id="btnNotifications" title="Notifications" onclick="showToast('Notifications', 'You have 3 party invites and 1 tournament match alert!')">
+            <i class="fa-regular fa-bell"></i>
+            <span class="notification-badge-dot"></span>
+          </button>
+
+          <!-- User Mini Profile Pill -->
+          <div class="header-user-pill" onclick="openEditProfileModal()">
+            <img class="header-avatar" id="headerAvatarImg" src="https://images.unsplash.com/photo-1566492031773-4f4e44671857?auto=format&fit=crop&w=400&q=80" alt="Profile">
+            <span class="header-user-name" id="headerUserName">Cyph3r_Ghost</span>
+            <i class="fa-solid fa-chevron-down" style="font-size: 0.75rem; color: var(--text-muted);"></i>
+          </div>
+        </div>
+      </header>
+
+      <!-- DASHBOARD CONTENT GRID -->
+      <main class="dashboard-content" id="dashboard">
+
+        <!-- ==========================================================================
+             LEFT / PRIMARY COLUMN
+             ========================================================================== -->
+        <div class="dashboard-primary-col">
+
+          <!-- 1. USER PROFILE HEADER WITH LEVEL & XP PROGRESS -->
+          <section class="profile-hero-card" aria-label="Gamer Profile and Progression">
+            <div class="profile-banner-bg" id="profileBannerBg">
+              <div class="banner-overlay-controls">
+                <button class="btn-banner-action" onclick="openEditProfileModal()">
+                  <i class="fa-solid fa-pen-to-square"></i> Edit Profile
+                </button>
+                <button class="btn-banner-action" onclick="testUnlockNewAchievement()">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i> Sim Unlock
+                </button>
+              </div>
+            </div>
+
+            <div class="profile-main-body">
+              <div class="profile-meta-row">
+                <div class="avatar-and-identity">
+                  <div class="avatar-wrapper">
+                    <div class="avatar-image-ring">
+                      <img id="userAvatarImg" src="https://images.unsplash.com/photo-1566492031773-4f4e44671857?auto=format&fit=crop&w=400&q=80" alt="Gamer Avatar">
+                    </div>
+                    <span class="online-aura-dot" title="Status: Online & Ready"></span>
+                    <span class="level-badge-float" id="xpLevelBadge">LVL 42</span>
+                  </div>
+
+                  <div class="identity-text">
+                    <div class="gamertag-title-row">
+                      <h1 class="gamertag-name" id="userGamertag">Cyph3r_Ghost</h1>
+                      <span class="clan-badge" id="userClan">[NEO]</span>
+                      <i class="fa-solid fa-circle-check verified-icon" title="Verified Pro Gamer"></i>
+                      <span class="rank-tier-pill" id="userRank">
+                        <i class="fa-solid fa-crown"></i> Grandmaster #342
+                      </span>
+                    </div>
+                    <div class="status-quote" id="userStatusQuote">
+                      <i class="fa-solid fa-quote-left"></i> "Never retreat. Always breach the mainframe."
+                    </div>
+                  </div>
+                </div>
+
+                <div class="profile-actions-group">
+                  <button class="btn-cyber-primary" onclick="claimDailyXp()">
+                    <i class="fa-solid fa-bolt"></i> Claim Daily XP
+                  </button>
+                  <button class="btn-cyber-secondary" onclick="showToast('Squad Broadcast', 'Broadcasting Ready Status to all online friends!')">
+                    <i class="fa-solid fa-broadcast-tower"></i> Broadcast LFG
+                  </button>
+                </div>
+              </div>
+
+              <!-- DYNAMIC LEVEL & XP PROGRESSION BAR -->
+              <div class="xp-progression-wrapper">
+                <div class="xp-header-info">
+                  <div class="xp-level-title">
+                    <span class="xp-current-level" id="xpCurrentLevelText">Level 42 Apex</span>
+                    <span class="xp-rank-name">• Season Pass Tier IV</span>
+                  </div>
+                  <div class="xp-numeric-stats" id="xpNumberStats">
+                    <span class="xp-current-num">14,850</span> / 20,000 XP
+                    <span class="xp-percentage-tag">(74%)</span>
+                  </div>
+                </div>
+
+                <div class="xp-track-outer">
+                  <div class="xp-track-fill" id="xpProgressFill" style="width: 74%;"></div>
+                </div>
+
+                <div class="xp-milestones-row">
+                  <span>Current Tier</span>
+                  <span id="xpMilestoneNext">Next: Level 43 Master</span>
+                </div>
+
+                <div class="xp-boost-banner">
+                  <div class="boost-text">
+                    <i class="fa-solid fa-fire"></i>
+                    <span><strong>Double XP Weekend Active!</strong> +50% bonus XP on all ranked matches & highlight posts.</span>
+                  </div>
+                  <button class="btn-claim-xp" onclick="claimDailyXp()">
+                    <i class="fa-solid fa-gift"></i> +500 XP Boost
+                  </button>
+                </div>
+              </div>
+
+              <!-- Profile Quick Stats Metric Cards -->
+              <div class="profile-stats-grid">
+                <div class="stat-metric-card">
+                  <div class="stat-metric-icon cyan">
+                    <i class="fa-solid fa-bullseye"></i>
+                  </div>
+                  <div class="stat-metric-content">
+                    <span class="stat-metric-value">68.4%</span>
+                    <span class="stat-metric-label">Win Rate</span>
+                  </div>
+                </div>
+
+                <div class="stat-metric-card">
+                  <div class="stat-metric-icon gold">
+                    <i class="fa-solid fa-globe"></i>
+                  </div>
+                  <div class="stat-metric-content">
+                    <span class="stat-metric-value">#342</span>
+                    <span class="stat-metric-label">Global Rank</span>
+                  </div>
+                </div>
+
+                <div class="stat-metric-card">
+                  <div class="stat-metric-icon purple">
+                    <i class="fa-solid fa-stopwatch"></i>
+                  </div>
+                  <div class="stat-metric-content">
+                    <span class="stat-metric-value">1,428 hrs</span>
+                    <span class="stat-metric-label">Total Playtime</span>
+                  </div>
+                </div>
+
+                <div class="stat-metric-card">
+                  <div class="stat-metric-icon pink">
+                    <i class="fa-solid fa-trophy"></i>
+                  </div>
+                  <div class="stat-metric-content">
+                    <span class="stat-metric-value">482 / 550</span>
+                    <span class="stat-metric-label">Achievements</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </section>
+
+          <!-- 2. QUICK-LAUNCH LIBRARY CARD SECTION -->
+          <section class="section-block" id="library" aria-label="Favorite Games Quick-Launch Library">
+            <div class="section-header-row">
+              <div class="section-title-wrap">
+                <i class="fa-solid fa-rocket section-title-icon"></i>
+                <h2 class="section-title">Quick-Launch Library</h2>
+                <span class="section-counter-badge">6 Featured</span>
+              </div>
+              <div class="section-controls-wrap">
+                <button class="filter-pill active" onclick="renderGameLibrary(false)">All Games</button>
+                <button class="filter-pill" onclick="renderGameLibrary(true)">Favorites Only</button>
+                <button class="filter-pill" onclick="showToast('Add Game', 'Connecting to Steam, Epic, & Xbox Cloud Libraries...')">
+                  <i class="fa-solid fa-plus"></i> Add Game
+                </button>
+              </div>
+            </div>
+
+            <!-- Games Grid -->
+            <div class="library-cards-grid" id="libraryCardsGrid">
+              <!-- Dynamically populated by app.js -->
+            </div>
+          </section>
+
+          <!-- 3. RECENT ACHIEVEMENTS SECTION -->
+          <section class="section-block" id="achievements" aria-label="Recent Achievements">
+            <div class="section-header-row">
+              <div class="section-title-wrap">
+                <i class="fa-solid fa-award section-title-icon"></i>
+                <h2 class="section-title">Recent Achievements</h2>
+                <span class="section-counter-badge">482 Unlocked</span>
+              </div>
+              <div class="section-controls-wrap">
+                <button class="filter-pill achievement-filter-pill active" data-filter="all">All</button>
+                <button class="filter-pill achievement-filter-pill" data-filter="legendary">Legendary & Mythic</button>
+                <button class="filter-pill achievement-filter-pill" data-filter="progress">In Progress</button>
+                <button class="filter-pill" onclick="testUnlockNewAchievement()">
+                  <i class="fa-solid fa-sparkles"></i> Sim Unlock
+                </button>
+              </div>
+            </div>
+
+            <!-- Achievements Grid -->
+            <div class="achievements-grid" id="achievementsGrid">
+              <!-- Dynamically populated by app.js -->
+            </div>
+          </section>
+
+          <!-- 4. COMMUNITY FEED FOR POSTING HIGHLIGHTS -->
+          <section class="community-feed-section" id="community" aria-label="Community Highlights Feed">
+            <div class="section-header-row">
+              <div class="section-title-wrap">
+                <i class="fa-solid fa-fire section-title-icon"></i>
+                <h2 class="section-title">Community Highlights</h2>
+                <span class="section-counter-badge">Live Feed</span>
+              </div>
+              <div class="section-controls-wrap">
+                <button class="filter-pill active">🔥 Trending</button>
+                <button class="filter-pill" onclick="showToast('Feed Filter', 'Showing clips from your squad only')">👥 Squad</button>
+                <button class="filter-pill" onclick="showToast('Feed Filter', 'Showing Clip of the Week nominees')">🏆 Weekly Best</button>
+              </div>
+            </div>
+
+            <!-- Interactive Post Highlight Composer -->
+            <div class="feed-composer-card">
+              <div class="composer-top-row">
+                <img class="composer-avatar" src="https://images.unsplash.com/photo-1566492031773-4f4e44671857?auto=format&fit=crop&w=400&q=80" alt="User Avatar">
+                <textarea class="composer-textarea" id="composerTextarea" placeholder="Share an epic clutch, screenshot, or build highlight with the Nexus community..."></textarea>
+              </div>
+
+              <!-- Media Preview Box -->
+              <div class="composer-preview-box" id="composerPreviewBox">
+                <button class="composer-preview-close" onclick="removeComposerPreview()">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+                <img id="composerPreviewImg" src="" alt="Preview">
+              </div>
+
+              <div class="composer-controls-row">
+                <div class="composer-attachment-tools">
+                  <select class="game-select-dropdown" id="composerGameSelect">
+                    <option value="Cyber Surge 2099">Cyber Surge 2099</option>
+                    <option value="Apex Void">Apex Void</option>
+                    <option value="Starfall Odyssey">Starfall Odyssey</option>
+                    <option value="Neon Velocity">Neon Velocity</option>
+                    <option value="Quantum Siege">Quantum Siege</option>
+                  </select>
+                  <button class="btn-attach-media" onclick="attachMediaPrompt()">
+                    <i class="fa-solid fa-video"></i> Attach Clip
+                  </button>
+                  <button class="btn-attach-media" onclick="attachMediaPrompt()">
+                    <i class="fa-regular fa-image"></i> Screenshot
+                  </button>
+                </div>
+                <button class="btn-post-highlight" onclick="submitNewHighlight()">
+                  <i class="fa-solid fa-paper-plane"></i> Post Highlight
+                </button>
+              </div>
+            </div>
+
+            <!-- Community Posts Feed List -->
+            <div class="feed-posts-container" id="feedPostsContainer">
+              <!-- Dynamically populated by app.js -->
+            </div>
+          </section>
+
+        </div>
+
+        <!-- ==========================================================================
+             RIGHT / SECONDARY COLUMN: ACTIVE FRIEND LIST
+             ========================================================================== -->
+        <div class="dashboard-secondary-col" id="friends">
+          <aside class="friends-panel-card" aria-label="Active Friends and Squad">
+            <div class="friends-panel-header">
+              <div class="friends-header-title-row">
+                <div class="friends-header-title">
+                  <i class="fa-solid fa-users" style="color: var(--accent-cyan);"></i>
+                  <span>Active Friends</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:0.5rem;">
+                  <span class="section-counter-badge" id="friendsCountBadge">7</span>
+                  <button class="btn-add-friend" title="Add Friend" onclick="showToast('Add Friend', 'Share your Friend Code: NEXUS-9842-CYPHER')">
+                    <i class="fa-solid fa-user-plus"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Friend Search Box -->
+              <div class="friends-search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" class="friends-search-input" id="friendsSearchInput" placeholder="Filter friends by name or game...">
+              </div>
+
+              <!-- Status Filter Tabs -->
+              <div class="friends-filter-tabs">
+                <button class="friends-tab-btn active" data-tab="all">All</button>
+                <button class="friends-tab-btn" data-tab="in-game">In-Game</button>
+                <button class="friends-tab-btn" data-tab="online">Online</button>
+              </div>
+            </div>
+
+            <!-- Scrollable Friends List -->
+            <div class="friends-list-scroll" id="friendsListScroll">
+              <!-- Dynamically populated by app.js -->
+            </div>
+          </aside>
+        </div>
+
+      </main>
+
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       INTERACTIVE MINI-CHAT DRAWER
+       ========================================================================== -->
+  <div class="chat-drawer" id="chatDrawer">
+    <div class="chat-drawer-header">
+      <div class="chat-target-user">
+        <img class="chat-target-avatar" id="chatTargetAvatar" src="" alt="Friend">
+        <div>
+          <div class="chat-target-name" id="chatTargetName">Friend</div>
+          <span style="font-size: 0.72rem; color: var(--accent-emerald);">● Online in Party</span>
+        </div>
+      </div>
+      <button class="chat-close-btn" onclick="closeChatDrawer()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="chat-messages-body" id="chatMessagesBody">
+      <!-- Chat bubbles inserted here -->
+    </div>
+    <div class="chat-input-bar">
+      <input type="text" class="chat-input-field" id="chatInputField" placeholder="Message friend...">
+      <button class="chat-send-btn" onclick="sendChatMessage()">
+        <i class="fa-solid fa-paper-plane"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 1: CYBER GAME LAUNCHER & ARCADE MINI-GAME
+       ========================================================================== -->
+  <div class="modal-backdrop" id="launcherModal">
+    <div class="modal-dialog-card">
+      <button class="modal-close-x" onclick="closeLauncherModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="launcher-hero-view" id="launcherHeroView">
+        <div class="launcher-hero-overlay">
+          <h2 class="launcher-game-title" id="launcherTitle">Game Title</h2>
+          <div class="launcher-meta-chips">
+            <span class="launcher-chip" id="launcherGenreChip">Action RPG</span>
+            <span class="launcher-chip" id="launcherVersionChip">v2.4.1</span>
+            <span class="launcher-chip" style="color:var(--accent-emerald);"><i class="fa-solid fa-shield"></i> Anti-Cheat Protected</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="launcher-interactive-body">
+        <!-- Live Telemetry Grid -->
+        <div class="launcher-telemetry-grid">
+          <div class="telemetry-box">
+            <div class="telemetry-val" id="launcherPingVal">14ms</div>
+            <div class="telemetry-label">Network Latency</div>
+          </div>
+          <div class="telemetry-box">
+            <div class="telemetry-val" id="launcherFpsVal">144 FPS</div>
+            <div class="telemetry-label">Target Refresh</div>
+          </div>
+          <div class="telemetry-box">
+            <div class="telemetry-val" style="color:var(--accent-emerald);">SYNCED</div>
+            <div class="telemetry-label">Cloud Saves</div>
+          </div>
+        </div>
+
+        <!-- Launch Status Progress -->
+        <div class="launch-status-bar">
+          <div class="launch-status-label">
+            <span id="launchStatusText">Initializing Anti-Cheat & Assets...</span>
+            <span style="color:var(--accent-cyan);">DIRECTX 12 ULTIMATE</span>
+          </div>
+          <div class="launch-progress-track">
+            <div class="launch-progress-fill" id="launchProgressFill"></div>
+          </div>
+        </div>
+
+        <!-- Interactive Arcade Mini-Game during launch -->
+        <div style="font-size: 0.82rem; color: var(--text-muted); display:flex; justify-content:space-between; align-items:center;">
+          <span>Play <strong>NEON RUNNER</strong> while the server initializes:</span>
+          <span style="color:var(--accent-cyan);"><i class="fa-solid fa-gamepad"></i> Space or Click to Jump</span>
+        </div>
+        <div class="launcher-arcade-zone">
+          <canvas class="arcade-canvas" id="arcadeCanvas"></canvas>
+          <div class="arcade-controls-hint">Tap / Spacebar to Dodge Barriers</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 2: ACHIEVEMENT INSPECTOR SHOWCASE
+       ========================================================================== -->
+  <div class="modal-backdrop" id="achievementModal">
+    <div class="modal-dialog-card" style="max-width: 520px;">
+      <button class="modal-close-x" onclick="closeAchievementModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div style="padding: 2.25rem 2rem; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1rem;">
+        <div class="achievement-icon-frame" style="width: 84px; height: 84px; font-size: 2.5rem; border-radius: 20px;">
+          <i id="achModalIcon" class="fa-solid fa-trophy"></i>
+        </div>
+
+        <div>
+          <span id="achModalRarity" style="font-size: 0.78rem; font-weight: 700; color: var(--accent-gold); letter-spacing: 1px;">LEGENDARY</span>
+          <h2 id="achModalTitle" style="font-family: var(--font-display); font-size: 1.8rem; color: #fff; margin: 4px 0;">Achievement Title</h2>
+          <span id="achModalGame" style="color: var(--accent-cyan); font-weight: 600; font-size: 0.9rem;">Game Title</span>
+        </div>
+
+        <p id="achModalDesc" style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; max-width: 400px;">
+          Detailed requirements and story behind unlocking this achievement.
+        </p>
+
+        <div style="background: rgba(22, 28, 48, 0.7); border: 1px solid var(--border-subtle); border-radius: var(--border-radius-md); padding: 0.75rem 1.5rem; display: flex; align-items: center; gap: 1rem;">
+          <span style="font-size: 0.85rem; color: var(--text-muted);">Reward Earned:</span>
+          <span id="achModalReward" style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 800; color: var(--accent-gold);">+750 XP</span>
+        </div>
+
+        <div style="display:flex; gap: 0.75rem; width: 100%; margin-top: 0.5rem;">
+          <button class="btn-cyber-primary" style="flex:1; justify-content:center;" onclick="showToast('Achievement Shared', 'Bragged achievement to your community highlight feed!')">
+            <i class="fa-solid fa-share-nodes"></i> Share to Feed
+          </button>
+          <button class="btn-cyber-secondary" onclick="closeAchievementModal()">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 3: PROFILE CUSTOMIZER MODAL
+       ========================================================================== -->
+  <div class="modal-backdrop" id="profileEditModal">
+    <div class="modal-dialog-card" style="max-width: 500px;">
+      <button class="modal-close-x" onclick="closeEditProfileModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div style="padding: 1.75rem;">
+        <h2 style="font-family: var(--font-display); font-size: 1.5rem; color: #fff; margin-bottom: 1.25rem;">
+          <i class="fa-solid fa-sliders" style="color:var(--accent-cyan);"></i> Customize Gamer Card
+        </h2>
+
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+          <div>
+            <label style="display:block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.35rem;">GAMERTAG</label>
+            <input type="text" id="editGamertagInput" class="comment-input" style="width: 100%; border-radius: var(--border-radius-md);" value="Cyph3r_Ghost">
+          </div>
+
+          <div>
+            <label style="display:block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.35rem;">CLAN / SQUAD TAG</label>
+            <input type="text" id="editClanInput" class="comment-input" style="width: 100%; border-radius: var(--border-radius-md);" value="NEO">
+          </div>
+
+          <div>
+            <label style="display:block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.35rem;">STATUS MOTTO / QUOTE</label>
+            <input type="text" id="editStatusInput" class="comment-input" style="width: 100%; border-radius: var(--border-radius-md);" value="Never retreat. Always breach the mainframe.">
+          </div>
+
+          <div style="display:flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem;">
+            <button class="btn-cyber-secondary" onclick="closeEditProfileModal()">Cancel</button>
+            <button class="btn-cyber-primary" onclick="saveProfileEdits()">Save Changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div class="toast-shelf" id="toastShelf"></div>
+
+  <!-- MOBILE BOTTOM NAVIGATION BAR -->
+  <nav class="mobile-bottom-nav">
+    <button class="mobile-nav-btn active" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+      <i class="fa-solid fa-house"></i>
+      <span>Home</span>
+    </button>
+    <button class="mobile-nav-btn" onclick="document.getElementById('library').scrollIntoView({behavior:'smooth'})">
+      <i class="fa-solid fa-gamepad"></i>
+      <span>Library</span>
+    </button>
+    <button class="mobile-nav-btn" onclick="document.getElementById('community').scrollIntoView({behavior:'smooth'})">
+      <i class="fa-solid fa-fire"></i>
+      <span>Feed</span>
+    </button>
+    <button class="mobile-nav-btn" onclick="document.getElementById('friends').scrollIntoView({behavior:'smooth'})">
+      <i class="fa-solid fa-users"></i>
+      <span>Friends</span>
+    </button>
+    <button class="mobile-nav-btn" onclick="openEditProfileModal()">
+      <i class="fa-solid fa-user-gear"></i>
+      <span>Profile</span>
+    </button>
+  </nav>
+
+  <!-- Application Script -->
+  <script src="app.js"></script>
+</body>
+</html>
